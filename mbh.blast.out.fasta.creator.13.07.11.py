@@ -25,7 +25,7 @@ blastE001_out = open ( '/Users/ionchannel/research/projects/ionchannels/non-sele
 
 ###parse 1###
 
-##for each blast report, read in all the top hits and add the hit pacID's to a list
+##for each blast report, read in all the top hits and add the hit pacID's to a list, then make every entry in the lists unique
 
 #declare variables
 
@@ -42,9 +42,34 @@ for line in blastE10_in:
 	#this identifies a hit in the blast report then appends it to a list of pacID's (the pacID's of the hits)
 	if lineSplit[0][0:4] == 'lcl|': 
 		blastE10_list.append(lineSplit[0][4:]) 
-		print len(blastE10_list)
+
+for line in blastE1_in:
+	lineSplit = line.split(' ')
 	
+	#this identifies a hit in the blast report then appends it to a list of pacID's (the pacID's of the hits)
+	if lineSplit[0][0:4] == 'lcl|': 
+		blastE1_list.append(lineSplit[0][4:]) 
+		
+for line in blastE001_in:
+	lineSplit = line.split(' ')
 	
+	#this identifies a hit in the blast report then appends it to a list of pacID's (the pacID's of the hits)
+	if lineSplit[0][0:4] == 'lcl|': 
+		blastE001_list.append(lineSplit[0][4:]) 
+
+
+#make every entry in the lists unique
+
+blastE10_list = list(set(blastE10_list))
+blastE1_list = list(set(blastE1_list))
+blastE001_list = list(set(blastE001_list))
+
+###parse 2###
+
+
+
+
+
 	
 	
 blastE10_in.close()
