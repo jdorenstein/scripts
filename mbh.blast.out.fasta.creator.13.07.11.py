@@ -5,9 +5,9 @@
 
 ###IOin
 
-#input the octopus genome fasta file (frmt: > [pacID] [Hsa-top hit (if present)] \n [sequence])
+#input the octopus genome csv file (frmt: [PFAM description]	[genes with this PFAM]	[PANTHER]	[PANTHER description]	[genes with this PANTHER]	[best human hit]	[human hit description]	[peptide])
 
-octFasta_in = open( '/Users/ionchannel/research/tools/db/blast/oct.proteome/000.origional.docs/octProteome.fa', 'r' )
+octFasta_in = open( '/Users/ionchannel/research/tools/db/blast/oct.proteome/000.origional.docs/oct_v2_fasta.txt', 'r' )
 
 #input the three blast reports
 
@@ -20,8 +20,8 @@ blastE001_in = open( '/Users/ionchannel/research/projects/ionchannels/non-select
 #output three fasta files (frmt: > [pacID] [Hsa-top hit (if present)] \n [sequence] )
 
 blastE10_out = open ( '/Users/ionchannel/research/projects/ionchannels/non-selective.k/geneset/mbh.candidate.e_val10.fa', 'a' )
-blastE1_out = open ( '/Users/ionchannel/research/projects/ionchannels/non-selective.k/geneset/mbh.candidate.e_val10.fa', 'a' )
-blastE001_out = open ( '/Users/ionchannel/research/projects/ionchannels/non-selective.k/geneset/mbh.candidate.e_val0.01','a')
+blastE1_out = open ( '/Users/ionchannel/research/projects/ionchannels/non-selective.k/geneset/mbh.candidate.e_val1.fa', 'a' )
+blastE001_out = open ( '/Users/ionchannel/research/projects/ionchannels/non-selective.k/geneset/mbh.candidate.e_val0.01.fa','a')
 
 ###parse 1###
 
@@ -66,9 +66,49 @@ blastE001_list = list(set(blastE001_list))
 
 ###parse 2###
 
+##for each entry in the list, fetch the corresponding octopus fasta entry
 
+#declare variables
 
+#read every line of csv file, then test to see if the pacID is in a blast_list. if there is a match, append the fasta entry into the fasta file
 
+for line in octFasta_in:
+	lineSplit = line.split('\t')
+	pacID = lineSplit[ 0 ]
+	if pacID in blastE1_list:
+		bhh = lineSplit[12]
+		peptide = lineSplit[14]
+		output = '>' + pacID + ' ' #information is always present
+		#append bhh onto output (this info may or may not be present
+		if bhh:
+			output = output + 'Hsa-' + bhh + '\n' + peptide + '\n'
+		if not bhh:
+			output = output + 'No best human hit identified in Excel file' + '\n' + peptide + '\n'
+		blastE1_out.write(output)
+	if pacID in blastE001_list:
+		bhh = lineSplit[12]
+		peptide = lineSplit[14]
+		output = '>' + pacID + ' ' #information is always present
+		#append bhh onto output (this info may or may not be present
+		if bhh:
+			output = output + 'Hsa-' + bhh + '\n' + peptide + '\n'
+		if not bhh:
+			output = output + 'No best human hit identified in Excel file' + '\n' + peptide + '\n'
+		blastE001_out.write(output)
+	if pacID in blastE10_list:
+		bhh = lineSplit [12]
+		peptide = lineSplit[14]
+		output = '>' + pacID + ' ' #information is always present
+		#append bhh onto output (this info may or may not be present
+		if bhh:
+			output = output + 'Hsa-' + bhh + '\n' + peptide + '\n'
+		if not bhh:
+			output = output + 'No best human hit identified in Excel file' + '\n' + peptide + '\n'
+		blastE10_out.write(output)
+    
+
+print 'done'
+ 
 
 	
 	
