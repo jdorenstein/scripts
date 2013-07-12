@@ -45,7 +45,7 @@ for line in blastE10_in:
 			print 'yay'
 			output = hsa_input_query + ' -> ' + oct_input_query + ' -> ' + hsa_query_top_hit + '\n'
 			mbhE10_out.write(output)
-		if hsa_input_query == hsa_query_top_hit:
+		if hsa_input_query != hsa_query_top_hit:
 			output = hsa_input_query + ' -> ' + oct_input_query + ' -> ' + hsa_query_top_hit + '\n'
 			notE10_out.write(output)
 		is_top = False
@@ -64,7 +64,7 @@ for line in blastE1_in:
 		if hsa_input_query == hsa_query_top_hit:
 			output = hsa_input_query + ' -> ' + oct_input_query + ' -> ' + hsa_query_top_hit + '\n'
 			mbhE1_out.write(output)
-		if hsa_input_query == hsa_query_top_hit:
+		if hsa_input_query != hsa_query_top_hit:
 			output = hsa_input_query + ' -> ' + oct_input_query + ' -> ' + hsa_query_top_hit + '\n'
 			notE1_out.write(output)
 		is_top = False
@@ -84,7 +84,7 @@ for line in blastE001_in:
 		if hsa_input_query == hsa_query_top_hit:
 			output = hsa_input_query + ' -> ' + oct_input_query + ' -> ' + hsa_query_top_hit + '\n'
 			mbhE001_out.write(output)
-		if hsa_input_query == hsa_query_top_hit:
+		if hsa_input_query != hsa_query_top_hit:
 			output = hsa_input_query + ' -> ' + oct_input_query + ' -> ' + hsa_query_top_hit + '\n'
 			notE001_out.write(output)
 		is_top = False
