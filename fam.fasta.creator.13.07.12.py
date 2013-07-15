@@ -17,7 +17,7 @@ name_out = ''
 #ask for the location of the file
 print 'This script will format the results of a blast report into a fasta file, then blast the fasta file against the database specified by the user, then print a formatted entry for the command log into the output file' + '\n'
 #ask the user if they want to use a blast output that is located in the ionchannels folder. if yes, then ask which folder they want to enter, and then the name of the blast output
-use_a_ionchannels = raw_input('Do you want to use an database located inside of the ionchannels project folder? Enter <y> or <n>:')
+use_a_ionchannels = raw_input('Do you want to use a blast report located inside of the ionchannels project folder? Enter <y> or <n>:')
 #if the user marks y, then the script will find out the output that they want to use
 if use_a_ionchannels == 'y':
 	print 'Which folder do you want to enter? (if you make a mistake, please restart the script)'
@@ -25,8 +25,11 @@ if use_a_ionchannels == 'y':
 		print fileName
 	print '\n'
 	which_dir = raw_input(':')
-	print 'This script will only accept outputs located in the geneset folder'
-	which_file = raw_input('Which file do you want to use:')
+	print 'This script will only accept blast reports located in the geneset folder'
+	for fileName in os.listdir('/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/'):
+		print fileName
+	print '\n'
+	which_file = raw_input('Which blast report do you want to use:')
 	in_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + which_file
 #if the user does not mark y, then the script asks them to enter a complete filepath
 else:
@@ -50,10 +53,11 @@ octFasta_in = open( '/Users/ionchannel/research/tools/db/blast/oct.proteome/000.
 #fasta_out frmt: >[pacID] [Hsa-top hit] \n [sequence]
 #log_out frmt(pt1): 'RUN SCRIPT TO FORMAT [blast output] INTO [fasta output]
 #log_out frmt(pt2): [fasta input files] \n [blast database] \n [command for blast] 
+
 log_out = open('/Users/ionchannel/research/projects/temp.command.out', 'a')
 fasta_out = open(out_path, 'a')
 
-
+#-------
 
 ###parse 1###
 
@@ -106,9 +110,9 @@ while stay_in_loop == True:
 
 ###parse 2###
 
-#using the blast report entered, create a formatted fasta file that contains each hit (the script asks if the user wants to remove repeats or to keep them)
+###using the blast report entered, create a formatted fasta file that contains each hit (the script asks if the user wants to remove repeats or to keep them)
 
-#create an array that contains the information in the octFasta_in file
+##create an array that contains the information in the octFasta_in file
 #declare variables
 
 octFasta = {}
@@ -125,13 +129,13 @@ for line in octFasta_in:
 	if not bhh:
 		octFasta[lineSplit[0]] = [lineSplit[0] , 'No best human hit identified in Excel file: ' , peptide ] 
 
-#create a list out of all of the hits found in the blast report (uses the lcl| format for the top hits)
+##create a list out of all of the hits found in the blast report (uses the lcl| format for the top hits)
 #declare variables
 
 top_hits = []
 
 #parse file for lcl| then input the pacID
-for line in blast_in #split the blast report up on the lines
+for line in blast_in: #split the blast report up on the lines
 	lineSplit = line.split(' ')
 	#if the line is a result, then the result's id is appended onto blast_list
 	if lineSplit[0][0:4] == 'lcl|':
@@ -141,7 +145,38 @@ for line in blast_in #split the blast report up on the lines
 
 rem_duplicates = raw_input('Do you want to remove duplicate entries in the fasta file? <y> or <n>')
 if rem_duplicates == 'y':
-	
+	top_hits = list(set(top_hits))
+	print 'Duplicates removed'
+##create the fasta file by using each entry in the list as a key for use in the octFasta dictionary, which is then formatted into a usable fasta output
+
+num = 0
+#for each item in top_hits, find the corresponding octopus proteome gene, then format the entry into the fasta file 
+for item in top_hits:	
+	output = '>' + octFasta[item][0] + ' ' + octFasta[item][1] + '\n' + octFasta[item][2] 
+	fasta_out.write(output)
+	num = num + 1 
+print 'Fasta created'
+
+###parse 3###
+
+###ask if the user wants the blast to be run, then create a formatted command line output (if the user answers no, then only create log of the script being created. if the user marks yes, then log both the script and the blast). 
+
+##ask the user if they want the blast to be run
+#declare variables
+
+run_blast = 'y'
+command_line_output = ''
+
+#use raw_input to determine if the user wants to run the blast
+
+run_blast = raw_input('Do you want to BLAST the fasta against the specified database? <y> or <n>')
+
+#if the user marks yes, then ask for the name of the blast report and error log, generate a command to run the blast, and run the blast (if the user does not mark yes, then the script will skip this step
+if run_blast == 'y':
+	name_blast_report_out = raw_input('Enter the name for your blast report:')
+	name_blast_error_out = raw_input('Enter the name for the error log of the blast report:')
+	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -num_threads 2 &'	
+	print command_line_output
 
 
 
