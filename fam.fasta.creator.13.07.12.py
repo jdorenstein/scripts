@@ -31,10 +31,11 @@ if use_a_ionchannels == 'y':
 	print '\n'
 	which_file = raw_input('Which blast report do you want to use:')
 	in_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + which_file
-#if the user does not mark y, then the script asks them to enter a complete filepath
+#if the user does not mark y, then the script asks the user to restart the script
 else:
-	in_path = raw_input('Please enter the COMPLETE FILEPATH (includes the name of the output file):')
-	
+	#in_path = raw_input('Please enter the COMPLETE FILEPATH (includes the name of the output file):')
+	print 'please restart the script'
+	temp_var = raw_input(':') #this is only to stop the script until the user restarts it
 #ask the user for the name out the file to put the fasta into
 name_out = raw_input('Enter the name of the fasta output file (located in the same folder as the input blast report):')
 out_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_out
@@ -175,8 +176,14 @@ run_blast = raw_input('Do you want to BLAST the fasta against the specified data
 if run_blast == 'y':
 	name_blast_report_out = raw_input('Enter the name for your blast report:')
 	name_blast_error_out = raw_input('Enter the name for the error log of the blast report:')
-	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -num_threads 2 &'	
-	print command_line_output
+	options_blosum = raw_input('Enter the blosum setting: <45> or <62>')
+	options_evalue = raw_input('Enter the evalue setting (just the number):')
+	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -evalue ' + options_evalue + ' -matrix BLOSUM' + options_blosum + ' -num_threads 2 &'	
+	os.system(command_line_output)
+
+#generate the formatted command log
+
+log_out.write('\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'RUN fam.fasta.creator.13.07.12 TO FORMAT (' + which_file + ') INTO (' + name_out + ')' + '\n' + '\n' + '\n' + '--------------------' + 'BLAST ' + name_out + ' AGAINST ' + which_database + ', BLOSUM' + options_blosum + ', E=' + options_evalue + ' (' + name_blast_report_out + ')' + '\n' + '\n' + 'fasta file' + '\n' + '       ./' + which_dir + '/' + name_out + '\n' + 'Database' + '\n' + filepath + '\n' + '\n' + 'command:' + '\n' + '      ' + command_line_output )
 
 
 
