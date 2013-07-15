@@ -183,7 +183,7 @@ if run_blast == 'y':
 
 #generate the formatted command log
 
-log_out.write('\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'RUN fam.fasta.creator.13.07.12 TO FORMAT (' + which_file + ') INTO (' + name_out + ')' + '\n' + '\n' + '\n' + '--------------------' + 'BLAST ' + name_out + ' AGAINST ' + which_database + ', BLOSUM' + options_blosum + ', E=' + options_evalue + ' (' + name_blast_report_out + ')' + '\n' + '\n' + 'fasta file' + '\n' + '       ./' + which_dir + '/' + name_out + '\n' + 'Database' + '\n' + filepath + '\n' + '\n' + 'command:' + '\n' + '      ' + command_line_output )
+log_out.write('\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'RUN fam.fasta.creator.13.07.12 TO FORMAT (' + which_file + ') INTO (' + name_out + ')' + '\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'BLAST ' + name_out + ' AGAINST ' + which_database + ', BLOSUM' + options_blosum + ', E=' + options_evalue + ' (' + name_blast_report_out + ')' + '\n' + '\n' + 'fasta file' + '\n' + '      ./' + which_dir + '/' + name_out + '\n' + 'Database' + '\n' + '      ' + filepath + '\n' + '\n' + 'command:' + '\n' + '      ' + command_line_output )
 
 
 
