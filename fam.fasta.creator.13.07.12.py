@@ -180,7 +180,8 @@ if run_blast == 'y':
 	name_blast_error_out = raw_input('Enter the name for the error log of the blast report:')
 	options_blosum = raw_input('Enter the blosum setting: <45> or <62>')
 	options_evalue = raw_input('Enter the evalue setting (just the number):')
-	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -evalue ' + options_evalue + ' -matrix BLOSUM' + options_blosum + ' -num_threads 2 &'	
+	options_results_both = raw_input('Enter the number of results to record:')
+	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -evalue ' + options_evalue + ' -matrix BLOSUM' + options_blosum + ' -num_descriptions ' + opitons_results_both + ' -num_threads 2 &'	
 	os.system(command_line_output)
 
 #generate the formatted command log
