@@ -13,6 +13,7 @@ in_path = ''
 out_path = ''
 use_a_ionchannels = ''
 name_out = ''
+log_path
 
 #ask for the location of the file
 print 'This script will format the results of a blast report into a fasta file, then blast the fasta file against the database specified by the user, then print a formatted entry for the command log into the output file' + '\n'
@@ -39,6 +40,7 @@ else:
 #ask the user for the name out the file to put the fasta into
 name_out = raw_input('Enter the name of the fasta output file (located in the same folder as the input blast report):')
 out_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_out
+log_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '000.command.txt'
 #-------
 
 
@@ -55,7 +57,7 @@ octFasta_in = open( '/Users/ionchannel/research/tools/db/blast/oct.proteome/000.
 #log_out frmt(pt1): 'RUN SCRIPT TO FORMAT [blast output] INTO [fasta output]
 #log_out frmt(pt2): [fasta input files] \n [blast database] \n [command for blast] 
 
-log_out = open('/Users/ionchannel/research/projects/temp.command.out', 'a')
+log_out = open(log_path, 'a')
 fasta_out = open(out_path, 'a')
 
 #-------
