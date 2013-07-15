@@ -13,7 +13,7 @@ in_path = ''
 out_path = ''
 use_a_ionchannels = ''
 name_out = ''
-log_path
+log_path = ''
 
 #ask for the location of the file
 print 'This script will format the results of a blast report into a fasta file, then blast the fasta file against the database specified by the user, then print a formatted entry for the command log into the output file' + '\n'
@@ -40,7 +40,7 @@ else:
 #ask the user for the name out the file to put the fasta into
 name_out = raw_input('Enter the name of the fasta output file (located in the same folder as the input blast report):')
 out_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_out
-log_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '000.command.txt'
+log_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/000.command.txt'
 #-------
 
 
@@ -181,7 +181,7 @@ if run_blast == 'y':
 	options_blosum = raw_input('Enter the blosum setting: <45> or <62>')
 	options_evalue = raw_input('Enter the evalue setting (just the number):')
 	options_results_both = raw_input('Enter the number of results to record:')
-	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -evalue ' + options_evalue + ' -matrix BLOSUM' + options_blosum + ' -num_descriptions ' + opitons_results_both + ' -num_threads 2 &'	
+	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -evalue ' + options_evalue + ' -matrix BLOSUM' + options_blosum + ' -num_descriptions ' + options_results_both + ' -num_threads 2 &'	
 	os.system(command_line_output)
 
 #generate the formatted command log
