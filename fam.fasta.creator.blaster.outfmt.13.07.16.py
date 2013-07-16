@@ -116,15 +116,16 @@ for line in blast_in:
 		line_count = 0
 	else:
 		if line_count <11:
-			lineSplit = line.split('\t') + '\n'
-			list_headers_out.write(lineSplit[1])
+			lineSplit = line.split('\t')
+			output = lineSplit[1] + '\n'
+			list_headers_out.write(output)
 			line_count = line_count + 1
 
 ###parse 3###
 
 ##activate the blastdbcmd command. use the command to create a new fasta file. once the new database is completed, delete the temporary file
 
-os.system('blastdbcmd -db /Users/ionchannel/research/tools/db/blast/oct.proteome/octProteomeDB -db type prot -entry_batch /Users/ionchannel/research/projects/ionchannels/temp.list.fa -outfmt %f -out ' + out_path)
+os.system('blastdbcmd -db /Users/ionchannel/research/tools/db/blast/oct.proteome/octProteomeDB -dbtype prot -entry_batch /Users/ionchannel/research/projects/ionchannels/temp.list.fa -outfmt %f -out ' + out_path)
 os.system('rm /Users/ionchannel/research/projects/ionchannels/temp.list.fa')
 
 
