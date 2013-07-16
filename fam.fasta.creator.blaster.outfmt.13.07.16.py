@@ -10,9 +10,9 @@ import sys,os,csv
 
 
 #declare variables
-in_path = ''
-out_path = ''
-use_a_ionchannels = ''
+in_path = '' #the path for inputting the blast report
+out_path = '' #the path for outputting the fasta file
+use_a_ionchannels = '' #
 name_out = ''
 log_path = ''
 
