@@ -15,7 +15,7 @@ out_path = '' #the path for outputting the fasta file
 use_a_ionchannels = '' #
 name_out = ''
 log_path = ''
-
+cgs_which = ''
 
 #ask for the location of the file
 print 'This script will format the results of a blast report into a fasta file, then blast the fasta file against the database specified by the user, then print a formatted entry for the command log into the output file' + '\n'
@@ -33,7 +33,9 @@ if use_a_ionchannels == 'y':
 		print fileName
 	print '\n'
 	which_file = raw_input('Which blast report do you want to use:')
+	cgs_which = raw_input('Which candidate geneset do you want to use:')
 	in_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + which_file
+	in_path_cgs = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + cgs_which
 #if the user does not mark y, then the script asks the user to restart the script
 else:
 	#in_path = raw_input('Please enter the COMPLETE FILEPATH (includes the name of the output file):')
@@ -50,7 +52,7 @@ log_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/00
 ###IOin##
 
 blast_in = open(in_path, 'r')
-
+cgs_in = open(in_path_cgs, 'r')
 
 ###IOout##
 
@@ -109,7 +111,7 @@ filepath = '/Users/ionchannel/research/tools/db/blast/12.proteomes/12.proteomes.
 ##create a list that contains the headers of the top ten hits for each sequence
 #declare variables
 line_count = 0
-
+header_list_2 = []
 for line in blast_in:
 	#for each line, see if it starts with #. if it does, reset the line counter (to 0). if it does not, add the top ten hits 
 	if line[0] == '#':
@@ -117,10 +119,12 @@ for line in blast_in:
 	else:
 		if line_count <11:
 			lineSplit = line.split('\t')
-			output = lineSplit[1] + '\n'
-			list_headers_out.write(output)
+			header_list_2.append(lineSplit[1])
 			line_count = line_count + 1
-
+header_list_2 = list(set(header_list_2))
+for item in header_list_2:
+	output = item + '\n'
+	list_headers_out.write(output)
 ###parse 3###
 
 ##activate the blastdbcmd command. use the command to create a new fasta file. once the new database is completed, delete the temporary file
@@ -128,27 +132,7 @@ for line in blast_in:
 os.system('blastdbcmd -db /Users/ionchannel/research/tools/db/blast/oct.proteome/octProteomeDB -dbtype prot -entry_batch /Users/ionchannel/research/projects/ionchannels/temp.list.fa -outfmt %f -out ' + out_path)
 os.system('rm /Users/ionchannel/research/projects/ionchannels/temp.list.fa')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-print 'Fasta created'
-
-###parse 3###
+###parse 4###
 
 ###ask if the user wants the blast to be run, then create a formatted command line output (if the user answers no, then only create log of the script being created. if the user marks yes, then log both the script and the blast). 
 
@@ -170,12 +154,47 @@ if run_blast == 'y':
 	options_evalue = raw_input('Enter the evalue setting (just the number):')
 	#options_results_both = raw_input('Enter the number of results to record:')
 	options_outfmt = raw_input('Enter the output format: <0> or <7>')
-	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -evalue ' + options_evalue + ' -matrix BLOSUM' + options_blosum + ' -outfmt ' + options_outfmt + ' -num_threads 2 &'	
+	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -evalue ' + options_evalue + ' -matrix BLOSUM' + options_blosum + ' -outfmt ' + options_outfmt + ' -num_threads 2'	
 	os.system(command_line_output)
 
 #generate the formatted command log
 
-#log_out.write('\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'RUN fam.fasta.creator.13.07.12 TO FORMAT (' + which_file + ') INTO (' + name_out + ')' + '\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'BLAST ' + name_out + ' AGAINST ' + which_database + ', BLOSUM' + options_blosum + ', E=' + options_evalue + ' (' + name_blast_report_out + ')' + '\n' + '\n' + 'fasta file' + '\n' + '      ./' + which_dir + '/' + name_out + '\n' + 'Database' + '\n' + '      ' + filepath + '\n' + '\n' + 'command:' + '\n' + '      ' + command_line_output )
+log_out.write('\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'RUN fam.fasta.creator.blaster.outfmt.13.07.16.py TO FORMAT (' + which_file + ') INTO (' + name_out + ')' + '\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'BLAST ' + name_out + ' AGAINST ' + '12.proteomes.blast.db' + ', BLOSUM' + options_blosum + ', E=' + options_evalue + ' (' + name_blast_report_out + ')' + '\n' + '\n' + 'fasta file' + '\n' + '      ./' + which_dir + '/' + name_out + '\n' + 'Database' + '\n' + '      ' + filepath + '\n' + '\n' + 'command:' + '\n' + '      ' + command_line_output )
+
+
+###parse 5###
+
+##scan the blast output. find the first hit that is a human gene, then see if it is located in the human cgs (look for homo-)
+cgs_header_list = []
+#scan the mapped candidate geneset. put each header into a list
+for line in cgs_in:
+	if line[0] == '>':
+		lineSplit = line.split(' ')
+		cgs_header_list.append(lineSplit[0][1:])
+
+#scan the blast output, take the first human result and check if the header is in the cgs_header_list. if it is, output it to the match file. if it is not, output if to the non-match file (append match and non_match to the end of the name of the blast report)
+blast_report = open('/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out, 'r')
+found_family = open('/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + 'fam', 'a')
+not_family = open('/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + 'not.fam', 'a')
+query_id_1 = ''
+found_an_entry = False
+for line in blast_report:
+	#for each line, see if it starts with #. if it does, reset the line counter (to 0). if it does not, see if the result is a human gene in the cgs folder. sort the gene into the appropriate file based on this information
+	if line[0] == '#':
+		lineSplit = line.split(' ')
+		if lineSplit[2] == 'hits':
+			if found_an_entry == False:
+				not_family.write(output)
+			found_an_entry = False
+	else:
+		lineSplit = line.split('\t')
+		query_id_1 = lineSplit[0]
+		if found_an_entry == False:
+			output = lineSplit[1] + '\n'
+			if lineSplit[1] in cgs_header_list:
+				found_family.write(output)
+				found_an_entry = True
+
 
 
 
