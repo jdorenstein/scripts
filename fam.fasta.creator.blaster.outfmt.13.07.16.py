@@ -60,7 +60,7 @@ blast_in = open(in_path, 'r')
 #log_out frmt(pt2): [fasta input files] \n [blast database] \n [command for blast] 
 
 log_out = open(log_path, 'a')
-fasta_out = open(out_path, 'a')
+#fasta_out = open(out_path, 'a')
 list_headers_out = open('/Users/ionchannel/research/projects/ionchannels/temp.list.fa', 'a')
 
 #-------
@@ -76,28 +76,28 @@ filepath = ''
 filename = ''
 
 #the first loop begins the sequence that asks for the database
-while stay_in_loop == True:
-	print 'Do you want to use the octopus proteome database, the 12.proteomes database, or a different database?' + '\n'
-	print '	If you want to use the octopus database, type in <octopus>.' + '\n' 
-	print '	If you want to use the 12.proteomes database, type in <12.proteomes>.' + '\n'
-	which_database = raw_input('	If you want to use a different database, type in <other>.')
-	#if the user enters octopus, the filepath is set to octProteomeDB
-	if which_database == 'octopus':
-		stay_in_loop = False
-		filepath = '/Users/ionchannel/research/tools/db/blast/oct.proteome/octProteomeDB'
-		break
-	#if the user enters 12.proteomes, the filepath is set to 12.proteomes
-	if which_database == '12.proteomes':
-		stay_in_loop = False
-		filepath = '/Users/ionchannel/research/tools/db/blast/12.proteomes/12.proteomes.blast.db'
-		break
-	#if the user enters other, they must enter the full filepath starting at /Users/
-	if which_database == 'other':
-		filepath = raw_input('Please enter the full filepath: /Users/')
-		stay_in_loop = False
-		break
-	if which_database != 'octopus' and which_database != '12.proteomes' and which_database != 'other':
-		print 'I am sorry, but you did not enter one of the three options. Please recheck your input again.' + '\n'
+#while stay_in_loop == True:
+#	print 'Do you want to use the octopus proteome database, the 12.proteomes database, or a different database?' + '\n'
+#	print '	If you want to use the octopus database, type in <octopus>.' + '\n' 
+#	print '	If you want to use the 12.proteomes database, type in <12.proteomes>.' + '\n'
+#	which_database = raw_input('	If you want to use a different database, type in <other>.')
+#	#if the user enters octopus, the filepath is set to octProteomeDB
+#	if which_database == 'octopus':
+#		stay_in_loop = False
+#		filepath = '/Users/ionchannel/research/tools/db/blast/oct.proteome/octProteomeDB'
+#		break
+#	#if the user enters 12.proteomes, the filepath is set to 12.proteomes
+#	if which_database == '12.proteomes':
+#		stay_in_loop = False
+filepath = '/Users/ionchannel/research/tools/db/blast/12.proteomes/12.proteomes.blast.db'
+#		break
+#	#if the user enters other, they must enter the full filepath starting at /Users/
+#	if which_database == 'other':
+#		filepath = raw_input('Please enter the full filepath: /Users/')
+#		stay_in_loop = False
+#		break
+#	if which_database != 'octopus' and which_database != '12.proteomes' and which_database != 'other':
+#		print 'I am sorry, but you did not enter one of the three options. Please recheck your input again.' + '\n'
 
 
 
@@ -119,6 +119,15 @@ for line in blast_in:
 			lineSplit = line.split('\t') + '\n'
 			list_headers_out.write(lineSplit[1])
 			line_count = line_count + 1
+
+###parse 3###
+
+##activate the blastdbcmd command. use the command to create a new fasta file. once the new database is completed, delete the temporary file
+
+os.system('blastdbcmd -db /Users/ionchannel/research/tools/db/blast/oct.proteome/octProteomeDB -db type prot -entry_batch /Users/ionchannel/research/projects/ionchannels/temp.list.fa -outfmt %f -out ' + out_path)
+os.system('rm /Users/ionchannel/research/projects/ionchannels/temp.list.fa')
+
+
 
 
 
@@ -174,4 +183,4 @@ if run_blast == 'y':
 
 blast_in.close()
 log_out.close()
-fasta_out.close()
+#fasta_out.close()
