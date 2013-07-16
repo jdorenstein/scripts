@@ -69,6 +69,7 @@ header = ''
 peptide = ''
 first_entry = True
 proteome_dict = {}
+proteome_list = []
 
 #scan in each line. identify the peptides and the headers and match each header to its peptide. when the script detects a new header, it saves the previous header/peptide as a dictionary entry
 for line in proteome_in:
@@ -76,6 +77,7 @@ for line in proteome_in:
 	if line[0] == '>':
 		if first_entry == False:
 			proteome_dict[peptide] = [header]
+			proteome_list.append(peptide)
 			peptide = ''
 			header = line[:-1]
 		if first_entry == True:
@@ -85,9 +87,49 @@ for line in proteome_in:
 	if line[0] != '>':
 		peptide = peptide + line[:-1]
 
-print str(proteome_dict)
+###parse 2###
+
+##create a list of the peptide sequences in the candidate geneset and a dictionary that acts like proteome_dict (but stores the info for the cgs
+
+
+#declare variables
+
+header = ''
+peptide = ''
+first_entry = True
+cgs_dict = {}
+cgs_list = []
+
+#scan in each line. identify the peptides and the headers and match each header to its peptide. when the script detects a new header, it saves the previous header/peptide as a dictionary entry
+for line in cgs_in:
+	#if the script detects a header, it puts the line into the 'header' variable, in addition, if first_entry == False, it creates a dictionary entry using the header and the peptide
+	if line[0] == '>':
+		if first_entry == False:
+			cgs_dict[peptide] = [header]
+			cgs_list.append(peptide)
+			peptide = ''
+			header = line[:-1]
+		if first_entry == True:
+			header = line[:-1]
+			first_entry = False
+	#if the script detects a peptide, it adds it to the peptide list
+	if line[0] != '>':
+		peptide = peptide + line[:-1]
 	
-	
+###parse 3###
+
+##see if the peptide is located in the proteome. if it is, create an output that contains the proteome header and the peptide. if it is not, use the origional header
+
+
+#see if the peptide in the cgs is in the proteome. if it is, create an output that contains the proteome header and the peptide. if it is not, use the origional header
+for item in cgs_list:
+	if item in proteome_list:
+		output = proteome_dict[item][0] + '\n' + item + '\n'
+		cgs_out.write(output)
+	if item not in proteome_list:
+		output = cgs_dict[item][0] + ': candidate_gene_did_not_map_to_proteome' + '\n' + item + '\n'
+		cgs_out.write(output)
+
 
 
 
