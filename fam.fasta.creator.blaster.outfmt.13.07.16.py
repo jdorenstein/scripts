@@ -1,8 +1,9 @@
 #!/usr/bin/python
 import sys,os,csv
 
-#this script will create a fasta file out of the results of the inputted blast report and inputted CSV source file (it will be interactive), then blast the fasta against a specified database
-
+#NOTE: This script is a version of fam.fasta.creator.13.07.12.py that is intended for use with -outfmt 7
+#this script will create a file that contains a list of sequence id's from a blast report, use the file to create a fasta file, then blast the fasta against a specified database
+#      this script is to be used to create a fasta file of the fished octopus proteome genes, then blast it against the hsa proteome database. once the blast is completed, the script will then take the top ten hits for each gene from the blast and test to see if each hit's id matches one from the human candidate geneset
 
 #find the user dependent filepaths
 #get the path and name of the blast report and input the blast report
