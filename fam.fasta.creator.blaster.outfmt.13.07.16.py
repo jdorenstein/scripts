@@ -16,6 +16,7 @@ use_a_ionchannels = '' #
 name_out = ''
 log_path = ''
 
+
 #ask for the location of the file
 print 'This script will format the results of a blast report into a fasta file, then blast the fasta file against the database specified by the user, then print a formatted entry for the command log into the output file' + '\n'
 #ask the user if they want to use a blast output that is located in the ionchannels folder. if yes, then ask which folder they want to enter, and then the name of the blast output
@@ -49,7 +50,7 @@ log_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/00
 ###IOin##
 
 blast_in = open(in_path, 'r')
-octFasta_in = open( '/Users/ionchannel/research/tools/db/blast/oct.proteome/000.origional.docs/oct_v2_fasta.txt', 'r' )
+
 
 ###IOout##
 
@@ -60,6 +61,7 @@ octFasta_in = open( '/Users/ionchannel/research/tools/db/blast/oct.proteome/000.
 
 log_out = open(log_path, 'a')
 fasta_out = open(out_path, 'a')
+list_headers_out = open('/Users/ionchannel/research/projects/ionchannels/temp.list.fa', 'a')
 
 #-------
 
@@ -94,18 +96,6 @@ while stay_in_loop == True:
 		filepath = raw_input('Please enter the full filepath: /Users/')
 		stay_in_loop = False
 		break
-		
-		#use_a_ionchannels = ''
-		#use_a_ionchannels = raw_input('Do you want to use an database located inside of the ionchannels project folder? Enter <y> or <n>:')
-		#if use_a_ionchannels == 'y':
-			#print 'Which folder do you want to enter? (if you make a mistake, please restart the script)'
-			#for fileName in os.listdir('/Users/ionchannel/research/projects/ionchannels/'):
-			#	print fileName
-			#print '\n'
-			#which_dir = raw_input(':')
-			#which_file = raw_input('Which file 
-			#filepath = raw_input('Pleae enter the COMPLETE FILEPATH (includes the name of the database):')
-			#break
 	if which_database != 'octopus' and which_database != '12.proteomes' and which_database != 'other':
 		print 'I am sorry, but you did not enter one of the three options. Please recheck your input again.' + '\n'
 
@@ -116,49 +106,36 @@ while stay_in_loop == True:
 
 ###using the blast report entered, create a formatted fasta file that contains each hit (the script asks if the user wants to remove repeats or to keep them)
 
-##create an array that contains the information in the octFasta_in file
+##create a list that contains the headers of the top ten hits for each sequence
 #declare variables
+line_count = 0
 
-octFasta = {}
+for line in blast_in:
+	#for each line, see if it starts with #. if it does, reset the line counter (to 0). if it does not, add the top ten hits 
+	if line[0] == '#':
+		line_count = 0
+	else:
+		if line_count <11:
+			lineSplit = line.split('\t') + '\n'
+			list_headers_out.write(lineSplit[1])
+			line_count = line_count + 1
 
-#create a dictionary from the CSV file that uses the pacID as the key
-for line in octFasta_in:
-	lineSplit = line.split('\t')
-	bhh = lineSplit [12]
-	peptide = lineSplit[14]
-	
-	if bhh:
-		bhh_mod = 'Hsa-' + bhh + ': '
-		octFasta[lineSplit[0]] = [lineSplit[0] , bhh_mod , peptide ]
-	if not bhh:
-		octFasta[lineSplit[0]] = [lineSplit[0] , 'No best human hit identified in Excel file: ' , peptide ] 
 
-##create a list out of all of the hits found in the blast report (uses the lcl| format for the top hits)
-#declare variables
 
-top_hits = []
 
-#parse file for lcl| then input the pacID
-for line in blast_in: #split the blast report up on the lines
-	lineSplit = line.split(' ')
-	#if the line is a result, then the result's id is appended onto blast_list
-	if lineSplit[0][0:4] == 'lcl|':
-		top_hits.append(lineSplit[0][4:])
-		
-#ask the user if they want to make the list unique. if the user answers yes, then remove duplicate entries in the list
 
-rem_duplicates = raw_input('Do you want to remove duplicate entries in the fasta file? <y> or <n>')
-if rem_duplicates == 'y':
-	top_hits = list(set(top_hits))
-	print 'Duplicates removed'
-##create the fasta file by using each entry in the list as a key for use in the octFasta dictionary, which is then formatted into a usable fasta output
 
-num = 0
-#for each item in top_hits, find the corresponding octopus proteome gene, then format the entry into the fasta file 
-for item in top_hits:	
-	output = '>' + octFasta[item][0] + ' ' + octFasta[item][1] + '\n' + octFasta[item][2] 
-	fasta_out.write(output)
-	num = num + 1 
+
+
+
+
+
+
+
+
+
+
+
 print 'Fasta created'
 
 ###parse 3###
@@ -182,13 +159,13 @@ if run_blast == 'y':
 	options_blosum = raw_input('Enter the blosum setting: <45> or <62>')
 	options_evalue = raw_input('Enter the evalue setting (just the number):')
 	#options_results_both = raw_input('Enter the number of results to record:')
-	options_outfmt = raw_input('Enter the output format: <0> or <7>
+	options_outfmt = raw_input('Enter the output format: <0> or <7>')
 	command_line_output = 'blastp -db ' + filepath + ' -query ' + out_path + ' -out ' + '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_report_out + ' 2> /Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + name_blast_error_out + ' -evalue ' + options_evalue + ' -matrix BLOSUM' + options_blosum + ' -outfmt ' + options_outfmt + ' -num_threads 2 &'	
 	os.system(command_line_output)
 
 #generate the formatted command log
 
-log_out.write('\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'RUN fam.fasta.creator.13.07.12 TO FORMAT (' + which_file + ') INTO (' + name_out + ')' + '\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'BLAST ' + name_out + ' AGAINST ' + which_database + ', BLOSUM' + options_blosum + ', E=' + options_evalue + ' (' + name_blast_report_out + ')' + '\n' + '\n' + 'fasta file' + '\n' + '      ./' + which_dir + '/' + name_out + '\n' + 'Database' + '\n' + '      ' + filepath + '\n' + '\n' + 'command:' + '\n' + '      ' + command_line_output )
+#log_out.write('\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'RUN fam.fasta.creator.13.07.12 TO FORMAT (' + which_file + ') INTO (' + name_out + ')' + '\n' + '\n' + '\n' + '--------------------' + '\n' + '\n' + '\n' + 'BLAST ' + name_out + ' AGAINST ' + which_database + ', BLOSUM' + options_blosum + ', E=' + options_evalue + ' (' + name_blast_report_out + ')' + '\n' + '\n' + 'fasta file' + '\n' + '      ./' + which_dir + '/' + name_out + '\n' + 'Database' + '\n' + '      ' + filepath + '\n' + '\n' + 'command:' + '\n' + '      ' + command_line_output )
 
 
 
