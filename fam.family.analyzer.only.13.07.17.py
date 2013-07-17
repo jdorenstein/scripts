@@ -1,5 +1,9 @@
 
 import os
+##output fmt: [query] [hit] [evalue] [bitscore]
+
+
+
 
 which_dir = 'trp'
 name_blast_report_out = 'out.blast.fam.' + raw_input('Enter blast report suffix (.###)')
@@ -33,7 +37,7 @@ for line in blast_report:
 		lineSplit = line.split('\t')
 		query_id_1 = lineSplit[0]
 		if found_an_entry == False:
-			output = lineSplit[0] + ' ' + lineSplit[1] + '\n'
+			output = lineSplit[0] + ' ' + lineSplit[1] + ' ' + lineSplit[10] + ' ' + lineSplit[11] + '\n'
 			if lineSplit[1] in cgs_header_list:
 				found_family.write(output)
 				found_an_entry = True
