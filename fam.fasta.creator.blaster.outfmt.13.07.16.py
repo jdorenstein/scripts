@@ -190,7 +190,7 @@ for line in blast_report:
 		lineSplit = line.split('\t')
 		query_id_1 = lineSplit[0]
 		if found_an_entry == False:
-			output = lineSplit[1] + '\n'
+			output = lineSplit[0] + lineSplit[1] + '\n'
 			if lineSplit[1] in cgs_header_list:
 				found_family.write(output)
 				found_an_entry = True
