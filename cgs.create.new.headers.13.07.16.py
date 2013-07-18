@@ -28,25 +28,32 @@ output_path = ''
 for fileName in os.listdir('/Users/ionchannel/research/projects/ionchannels/'):
 	print fileName
 which_dir = raw_input('Enter the name of the folder the candidate geneset is located in:')
+print '\n' + '\n'
 print '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/'
+print '\n'
+#list the contents of the chosen ion channel geneset folder
 for fileName in os.listdir('/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/'):
 	print fileName
-tempvar1 = raw_input('Enter the name of the candidate geneset')
+tempvar1 = raw_input('Enter the name of the candidate geneset:')
 candidate_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + tempvar1
 
 #get the path to the proteome
 #ask if the user wants to use the octopus proteome or the 12.proteomes fasta
-octopus_or_12 = raw_input('Do you want to use the octopus or the 12.proteomes fasta to retrieve the proper headers? <octopus> <12.proteomes>')
-if octopus_or_12 == '12.proteomes':
+octopus_or_12 = raw_input('Do you want to use the octopus or the 12.proteomes fasta to retrieve the proper headers? <oct> <12>')
+if octopus_or_12 == '12':
 	proteome_path = '/Users/ionchannel/research/tools/db/blast/12.proteomes/000.origional.docs/12.proteomes.fa'
-if octopus_or_12 == 'octopus':
+if octopus_or_12 == 'oct':
 	proteome_path = '/Users/ionchannel/research/tools/db/blast/oct.proteome/000.origional.docs/octProteome.fa'
-
 #use location of candidate geneset to get location of output
-print 'This program will create an output file named candidate.geneset.mapped.fa in the same directory as the origional cgs.'
-output_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.geneset.mapped.fa'
 
-
+if tempvar1 == 'candidate.genset.fa':
+	print 'This program will create an output file named candidate.geneset.mapped.fa in the same directory as the origional cgs.'
+	output_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.geneset.mapped.fa'
+	errors_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.geneset.mapped.errors.fa'
+if tempvar1 == 'candidate.geneset.full.unsafe.fa':
+	print 'This program will create an output file named candidate.geneset.mapped.fa in the same directory as the origional cgs.'
+	output_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.geneset.mapped.full.unsafe.fa'
+	errors_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.geneset.mapped.errors.full.unsafe.fa'
 
 
 ###IOin##
@@ -58,6 +65,7 @@ proteome_in = open(proteome_path, 'r')
 ###IOout##
 
 cgs_out = open(output_path, 'a')
+errors_out = open(errors_path, 'a')
 
 ###parse 1###
 
@@ -108,8 +116,8 @@ for line in cgs_in:
 			cgs_dict[peptide] = [header]
 			cgs_list.append(peptide)
 			peptide = ''
-			header = line[:-1]
-		if first_entry == True:
+		header = line[:-1]
+		if first_entry == True: #this allows the program to skip the first header, as this would cause it to produce a false error
 			header = line[:-1]
 			first_entry = False
 	#if the script detects a peptide, it adds it to the peptide list
@@ -127,6 +135,7 @@ for item in cgs_list:
 		output = proteome_dict[item][0] + '\n' + item + '\n'
 		cgs_out.write(output)
 	if item not in proteome_list:
+		errors_out.write( cgs_dict[item][0] + '\n' + item + '\n' )
 		output = cgs_dict[item][0] + ': candidate_gene_did_not_map_to_proteome' + '\n' + item + '\n'
 		cgs_out.write(output)
 
