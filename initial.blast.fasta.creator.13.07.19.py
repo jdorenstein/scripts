@@ -53,8 +53,8 @@ cgs_in = open(in_path_cgs, 'r')
 #log_out frmt(pt2): [fasta input files] \n [blast database] \n [command for blast] 
 
 log_out = open(log_path, 'a')
-fasta_out = open(out_path, 'a')
-blast_out = open(blast_path, 'a')
+#fasta_out = open(out_path, 'a')
+#blast_out = open(blast_path, 'a')
 list_headers_out = open('/Users/ionchannel/research/projects/ionchannels/temp.list.fa', 'a')
 
 #specify the filepath used for the blast database
@@ -84,6 +84,7 @@ for line in blast_in:
 	if line[0] != '#':
 		lineSplit = line.split('\t')
 		header_list_2.append(lineSplit[1])
+		
 #make all items in the list unique
 header_list_2 = list(set(header_list_2))
 #write each item in the list to a temporary output file
@@ -92,12 +93,12 @@ for item in header_list_2:
 	list_headers_out.write(output)
 	
 	
-###parse 3###
 
-##activate the blastdbcmd command. use the command to create a new fasta file. once the new database is completed, delete the temporary file
 
-os.system('blastdbcmd -db /Users/ionchannel/research/tools/db/blast/oct.proteome/octProteomeDB -dbtype prot -entry_batch /Users/ionchannel/research/projects/ionchannels/temp.list.fa -outfmt %f -out ' + out_path)
-os.system('rm /Users/ionchannel/research/projects/ionchannels/temp.list.fa')
+
+
+
+
 
 ###parse 4###
 	
@@ -117,6 +118,14 @@ log_out.write('\n' + '\n' + '\n' + '==================13.07.19===' + '\n' + '\n'
 blast_in.close()
 cgs_in.close()
 list_headers_out.close()
-blast_out.close()
+#blast_out.close()
 log_out.close()
-fasta_out.close()
+#fasta_out.close()
+
+
+###parse 3###
+
+##activate the blastdbcmd command. use the command to create a new fasta file. once the new database is completed, delete the temporary file
+
+os.system('blastdbcmd -db /Users/ionchannel/research/tools/db/blast/oct.proteome/octProteomeDB -dbtype prot -entry_batch /Users/ionchannel/research/projects/ionchannels/temp.list.fa -outfmt %f -out ' + out_path)
+os.system('rm /Users/ionchannel/research/projects/ionchannels/temp.list.fa')
