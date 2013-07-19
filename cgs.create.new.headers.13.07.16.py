@@ -35,6 +35,7 @@ print '\n'
 for fileName in os.listdir('/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/'):
 	print fileName
 tempvar1 = raw_input('Enter the name of the candidate geneset:')
+
 candidate_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/' + tempvar1
 
 #get the path to the proteome
@@ -46,7 +47,7 @@ if octopus_or_12 == 'oct':
 	proteome_path = '/Users/ionchannel/research/tools/db/blast/oct.proteome/000.origional.docs/octProteome.fa'
 #use location of candidate geneset to get location of output
 
-if tempvar1 == 'candidate.genset.fa':
+if tempvar1 == 'candidate.geneset.fa':
 	print 'This program will create an output file named candidate.geneset.mapped.fa in the same directory as the origional cgs.'
 	output_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.geneset.mapped.fa'
 	errors_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.geneset.mapped.errors.fa'
