@@ -19,7 +19,7 @@ output_fasta = open(output_path,'a')
 #declare variables
 
 seq_dict = {} #format: [key-(gene locus)] : {[seq_record object], [seq length]}
-geneID_index = ''
+geneID_id = ''
 
 ###parse 1###
 #create a dictionary that contains the sequences that should be kept
@@ -31,8 +31,9 @@ for seq_record in SeqIO.parse(input_path, "fasta"): #parses each fasta entry
 	geneID_list = geneID_line.split(' ')
 	sequence_length = len(seq_record)
 	for item in geneID_list:
-		if item[:3] == 'gene':
+		if item[0:4] == 'gene':
 			geneID_id = item
+			print geneID_id
 	if geneID_id in seq_dict.keys():
 		#if the length of the new peptide is longer, replace the sequence. otherwise, proceed
 		if sequence_length > seq_dict[geneID_list[4]][1]:
