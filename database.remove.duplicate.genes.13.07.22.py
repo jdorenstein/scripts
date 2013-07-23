@@ -34,11 +34,11 @@ for seq_record in SeqIO.parse(input_path, "fasta"): #parses each fasta entry
 		if item[0:3] == 'GN=':
 			
 			geneID_id = item
-			print item + '\n'
+			
 			#print geneID_id
 	if geneID_id in seq_dict.keys():
 		#if the length of the new peptide is longer, replace the sequence. otherwise, proceed
-		if sequence_length > seq_dict[geneID_list[4]][1]:
+		if sequence_length > seq_dict[geneID_id][1]:
 			seq_dict[geneID_id] = [seq_record,sequence_length]
 	else:
 		#create a formatted entry in the seq_dict
@@ -49,7 +49,7 @@ print 'created dictionary'
 			
 ###parse 2###
 #write the dictionary to a file
-print seq_dict.keys()
+
 for key in seq_dict:
 	output = seq_dict[key][0].format('fasta')
 	output_fasta.write(output)
