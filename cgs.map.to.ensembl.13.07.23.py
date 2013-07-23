@@ -56,8 +56,8 @@ errors_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '
 
 ###IOout##
 
-#cgs_out = open(output_path, 'a')
-#errors_out = open(errors_path, 'a')
+cgs_out = open(output_path, 'a')
+errors_out = open(errors_path, 'a')
 
 ###parse 1###
 
@@ -69,55 +69,48 @@ for seq_record in SeqIO.parse(candidate_path, "fasta"):
 	cgs_keys.append(str(seq_record.seq))
 	cgs_dict[str(seq_record.seq)] = [seq_record]
 #print cgs_keys
+
+
+
+
+
+
 ###parse 2###
 #for each entry in the human proteome, search the cgs list for a hit. if the script finds a hit, append the entry from the proteome onto hits_list.
 #declare variables
-hits_list = []
+hits_keys = []
+hits_dict = {}
 for seq_record in SeqIO.parse(proteome_path, "fasta"): #parses each fasta entry
 	#if the sequence is found in the cgs_list, append the entry to hits_list
 	if str(seq_record.seq) in cgs_keys:
-		print 'yay    ' + str(seq_record.seq)
+		hits_dict[str(seq_record.seq)] = [seq_record]
+		hits_keys.append(str(seq_record.seq))
 	
 print 'created dictionary'
 
 
 
+###parse 3###
 
-
-
-
-
-
-
-###parse 2###
-
-##create a list of the peptide sequences in the candidate geneset and a dictionary that acts like proteome_dict (but stores the info for the cgs
-
+#for each entry in cgs_keys, see if it is in hits_keys. if it is, write the ensembl info to the ok file. if not, write the jgi to the errors file
+for item in cgs_keys:
+	if item in hits_keys:
+		output = hits_dict[item][0].format('fasta')
+		cgs_out.write(output)
+	else:
+		output = cgs_dict[item][0].format('fasta')
+		errors_out.write(output)
 
 #declare variables
 
 
 
-##see if the peptide is located in the proteome. if it is, create an output that contains the proteome header and the peptide. if it is not, use the origional header
-
-
-#see if the peptide in the cgs is in the proteome. if it is, create an output that contains the proteome header and the peptide. if it is not, use the origional header
-#for item in cgs_list:
-#	if item in proteome_list:
-#		output = proteome_dict[item][0] + '\n' + item + '\n'
-#		cgs_out.write(output)
-#	if item not in proteome_list:
-#		errors_out.write( cgs_dict[item][0] + '\n' + item + '\n' )
-#		output = cgs_dict[item][0] + ': candidate_gene_did_not_map_to_proteome' + '\n' + item + '\n'
-#		cgs_out.write(output)
 
 
 
 
-
-
-
-
+cgs_out.close()
+errors_out.close()
 
 
 
