@@ -3,12 +3,12 @@ from Bio.Alphabet import IUPAC
 import os
 
 #this program is designed to parse a fasta file (ensembl), and remove all peptides, except for the longest, that are created from the same gene
-for fileName in os.listdir('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/'): #list the ionchannel folders that the user can enter
+for fileName in os.listdir('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/ensembl.archive.full/'): #list the ionchannel folders that the user can enter
 	print fileName
 input_name = raw_input('Enter the name of the file you want to format')
 #output_name = raw_input('Enter the name of the output file')
 output_name = input_name[:-2] + 'longest.peptide.fa'
-input_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/' + input_name
+input_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/ensembl.archive.full/' + input_name
 output_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/' + output_name
 ###IOin###
 #nothing to import
