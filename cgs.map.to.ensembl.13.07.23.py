@@ -36,7 +36,7 @@ candidate_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir 
 #ask if the user wants to use the octopus proteome or the 13.proteomes fasta
 octopus_or_13 = raw_input('Do you want to use the octopus or the 13.proteomes fasta to retrieve the proper headers? <oct> <13>')
 if octopus_or_13 == '13':
-	proteome_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/ensembl.archive.full/proteome.homo.sapiens.fa'
+	proteome_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/proteome.homo.sapiens.longest.peptide.fa'
 if octopus_or_13 == 'oct':
 	proteome_path = '/Users/ionchannel/research/tools/db/blast/oct.proteome/000.origional.docs/octProteome.fa'
 #use location of candidate geneset to get location of output

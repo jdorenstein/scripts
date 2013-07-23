@@ -31,7 +31,7 @@ for seq_record in SeqIO.parse(input_path, "fasta"): #parses each fasta entry
 	geneID_list = geneID_line.split(' ')
 	sequence_length = len(seq_record)
 	for item in geneID_list:
-		if item[0:3] == 'GN=':
+		if item[0:5] == 'gene:':
 			
 			geneID_id = item
 			
@@ -43,6 +43,7 @@ for seq_record in SeqIO.parse(input_path, "fasta"): #parses each fasta entry
 	else:
 		#create a formatted entry in the seq_dict
 		seq_dict[geneID_id] = [seq_record,sequence_length]
+	#geneID_id = ''
 print 'created dictionary'
 
 
