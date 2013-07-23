@@ -33,7 +33,7 @@ for seq_record in SeqIO.parse(input_path, "fasta"): #parses each fasta entry
 	for item in geneID_list:
 		if item[0:4] == 'gene':
 			geneID_id = item
-			print geneID_id
+			#print geneID_id
 	if geneID_id in seq_dict.keys():
 		#if the length of the new peptide is longer, replace the sequence. otherwise, proceed
 		if sequence_length > seq_dict[geneID_list[4]][1]:
