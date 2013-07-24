@@ -9,6 +9,27 @@ from Bio.Alphabet import IUPAC
 #there are no explicit files to input, but the list that contains the filenames is created here (file_names_list)
 file_names_list = []
 for fileName in os.listdir('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/ensembl.proteomes.full/'):
-	file_names_list.append(fileName)
+	#if the fileName does not start with '.', append it to file_names_list
+	if fileName[0] != '.':
+		file_names_list.append(fileName)
 
-print file_names_list
+###IOout###
+#nothing to output
+
+
+###MAIN LOOP###
+for file_name in file_names_list:
+	###IOin###
+	file_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/ensembl.proteomes.full/' + file_name #define the file path to the current proteome
+	
+	###parse 1###
+	
+	##create a list of all non-patch and patch fasta entries
+	for seq_record in SeqIO.parse(file_path, "fasta"): #parse each fasta entry using biopython. for each entry, create a sequence object named 'seq_record'
+		#grab the header for each fasta entry. search for '_PATCH:' in the entry. if it is found, add the sequence object to the 
+		header = seq_record.description
+		if '_PATCH:' in header:
+			
+			
+		
+	
