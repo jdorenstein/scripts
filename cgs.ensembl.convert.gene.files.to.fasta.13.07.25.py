@@ -53,21 +53,29 @@ hsa_proteome_dict = SeqIO.to_dict(SeqIO.parse(hsa_proteome_path, "fasta"), key_f
 ##parse the list of gene names. for each gene, see if it is in the hsa_proteome_dict.keys(). if it is, write the sequence object to the new candidate.geneset.fa. if it is not, print ERROR: (genename)
 
 for line in gene_names_in:
-	if line[:-1] in hsa_proteome_dict.keys() and line != '':
+	line_in_proteome = False
+	if line[:-1] in hsa_proteome_dict.keys():
 		sequence_record = hsa_proteome_dict[line[:-1]]
 		output = sequence_record.format('fasta')
 		cgs_out.write(output)
-	else:
+		line_in_proteome = True
+	if line in hsa_proteome_dict.keys():
+		sequence_record = hsa_proteome_dict[line]
+		output = sequence_record.format('fasta')
+		cgs_out.write(output)
+		line_in_proteome = True
+	if line_in_proteome == False:
 		output = line
 		errors_out.write(line)
 errors_out.close()
 
 
 
+log_out = open('/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/000.command.txt', 'a')
+log_entry = '\n' + '\n' + '\n' + '==================13.07.25===' + '\n' + '\n' + '\n' + 'RUN cgs.ensembl.convert.gene.files.to.fasta.13.07.25.py TO CONVERT (new.cgs.headers.txt) TO (candidate.geneset.fa)'		
+log_out.write(log_entry)
 
-
-
-
+log_out.close()
 
 
 gene_names_in.close()
