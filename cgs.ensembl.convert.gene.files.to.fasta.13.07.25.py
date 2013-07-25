@@ -40,7 +40,7 @@ hsa_proteome_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.
 cgs_out_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.geneset.fa'
 errors_path = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/errors.candidate.geneset.fa'
 cgs_out = open(cgs_out_path, 'a')
-errors_out = open(
+errors_out = open(errors_path, 'a')
 
 ###Parse 1###
 
