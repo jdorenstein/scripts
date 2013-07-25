@@ -12,9 +12,12 @@ for fileName in os.listdir('/Users/ionchannel/research/tools/db/blast/13.proteom
 	#if the fileName does not start with '.', append it to file_names_list
 	if fileName[0] != '.':
 		file_names_list.append(fileName)
-
+############NOTE: FOR NOW, HOMO SAPIENS PROTEOME IS THE ONLY ONE THAT THE SCRIPT WORKS ON. THE FILE_NAMES_LIST HAS BEEN SET TO ONLY CONTAIN THIS
+file_names_list = []
+file_names_list = ['proteome.homo.sapiens.fa']
 ###IOout###
-#nothing to output
+patch_out = open('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/ensembl.homo.patch/proteome.homo.sapiens.patch.fa', 'a')
+primary_out = open('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/ensembl.homo.primary/proteome.homo.sapiens.primary.fa','a')
 
 
 ###MAIN LOOP###
@@ -29,7 +32,11 @@ for file_name in file_names_list:
 		#grab the header for each fasta entry. search for '_PATCH:' in the entry. if it is found, add the sequence object to the 
 		header = seq_record.description
 		if '_PATCH:' in header:
-			
+			output = seq_record.format('fasta')
+			patch_out.write(output)
+		else:
+			output = seq_record.format('fasta')
+			primary_out.write(output)
 			
 		
 	
