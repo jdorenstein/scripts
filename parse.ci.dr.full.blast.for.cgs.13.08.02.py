@@ -32,7 +32,7 @@ def create_hits_list(dict_in, hsa_id):
 		if line in dict_in.keys():
 			list_temp_hits = dict_in[line][0]
 			for item in list_temp_hits:
-				check_temp = item + ' homo-' + line
+				check_temp = item + '\t' + 'homo-' + line
 				if check_temp not in list_hits:
 					list_hits.append(check_temp)
 	return (list_hits)
