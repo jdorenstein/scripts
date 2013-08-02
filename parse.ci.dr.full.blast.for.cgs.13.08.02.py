@@ -32,8 +32,9 @@ def create_hits_list(dict_in, hsa_id):
 		if line in dict_in.keys():
 			list_temp_hits = dict_in[line][0]
 			for item in list_temp_hits:
-				if item not in list_hits:
-					list_hits.append(item + ' ' + line)
+				check_temp = item + ' homo-' + line
+				if check_temp not in list_hits:
+					list_hits.append(check_temp)
 	return (list_hits)
 
 
@@ -100,10 +101,10 @@ dr_hits_list = create_hits_list(dr_hits_dict, hsa_id_list)
 ##output the contents of ce hits list and dr hits list to their respective files
 
 for item in ce_hits_list:
-	output = item + '\n'
+	output = 'caenorhabditis-' + item + '\n'
 	ce_cgs_out.write(output)
 for item in dr_hits_list:
-	output = item + '\n'
+	output = 'drosophila-' + item + '\n'
 	dr_cgs_out.write(output)
 
 
