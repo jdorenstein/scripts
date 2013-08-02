@@ -2,11 +2,12 @@ import os
 
 ###IOin###
 
-conversion_path = '/Users/ionchannel/research/projects/ionchannels/candidate.genesets.db/geneset/gene.hsa.drosophila.celegans.conversion'
+conversion_path = '/Users/ionchannel/research/projects/ionchannels/k+/geneset/gene.hsa.drosophila.celegans.conversion'
 conversion_in = open(conversion_path, 'r')
-
-cgs_id_in = '/Users/ionchannel/research/projects/ionchannels/other.cation.channels/geneset/candidate.geneset.fa'
+which_dir = raw_input('Enter the name of the ionchannel folder:')
+cgs_id_in = '/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.genesets.gene.list'
 cgs_in = open(cgs_id_in, 'r')
+cgs_out = open('/Users/ionchannel/research/projects/ionchannels/' + which_dir + '/geneset/candidate.geneset.gene.hm.list', 'a')
 hsa_proteome_list = []
 for line in conversion_in:
 	lineSplit = line.split('\t')
@@ -17,9 +18,10 @@ for line in conversion_in:
 			
 for line in cgs_in:
 	line = line[:-1]
-	if line not in hsa_proteome_list:
-		print line
+	if line in hsa_proteome_list:
+		cgs_out.write(line + '\n')
 	
 	
 conversion_in.close()
 cgs_in.close()
+cgs_out.close()
