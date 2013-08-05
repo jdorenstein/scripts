@@ -44,7 +44,7 @@ def create_hits_list(dict_in, hsa_id):
 
 ##this script does not ask the user for any input 
 # OUTPUT top hits and no hits for each (proteome) x (proteome) blast
-# format: (query) (top hit) (bit score) (evalue) (percent identity) (alignment length)
+# format: (query) (top hit) (bit score) (evalue) (percent identity) (alignment length) (query start) (query stop)
 
 
 path_to_blast = '/Users/ionchannel/research/projects/blast.reports.130801/'

@@ -22,7 +22,7 @@ def create_hits_dict(blast_in):
 				hits_dict[hit_id] = [[query_id]]
 	return (hits_dict)
 ##this script creates a formatted coverage map (Query) (subject) (%coverage) using eric's formatted blast reports
-
+####eric's format: (query) (top hit) (bit score) (evalue) (percent identity) (alignment length) (query start) (query stop)
 ###IOin###
 hsa_prot_length_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/proteomes.lengths.13.08.02/proteome.homo.sapiens.primary.longest.peptide.lengths.fa'
 ce_prot_length_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/proteomes.lengths.13.08.02/proteome.caenorhabditis.elegans.longest.peptide.lengths.fa'
@@ -50,11 +50,11 @@ for line in dr_length:
 ###Parse 2###
 ##for each file, create the name of the path and the name of the output file. then, 
 
-for FileName in os.listdir('/Users/ionchannel/research/projects/blast.reports.130801/'):
+for FileName in os.listdir('/Users/ionchannel/research/projects/tophits.130805/'):
 	#if the filename has 'out.topHits.', add it to FileNames_list
 	if FileName[0:12] == 'out.topHits.' and FileName[-12:] != '.allS.noHits':
 		##IOin##
-		blast_in_path = '/Users/ionchannel/research/projects/blast.reports.130801/' + FileName
+		blast_in_path = '/Users/ionchannel/research/projects/tophits.130805/' + FileName
 		blast_in = open(blast_in_path, 'r')
 		##IOout##
 		output_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/top.hits.coverage.13.08.02/' + FileName + '.coverage'
@@ -69,12 +69,16 @@ for FileName in os.listdir('/Users/ionchannel/research/projects/blast.reports.13
 			query_length = ''
 			top_hit_length = ''
 			query_species = ''
+			query_start = ''
+			query_end = ''
 			lineSplit = line.split('\t')
 			#print lineSplit
 			#if there is a hit, get the queryID and the subject ID. (do not remove the species name). then, calculate the % coverage using the query length(using the length dictionaries and the species name)
 			if lineSplit[1] != '-':
 				queryID = lineSplit[0]
 				subjectID = lineSplit[1]
+				query_start = lineSplit[6] #assign the smaller number
+				query_end = lineSplit[7][:-1] #assign the larger number
 				top_hit_length = lineSplit[5][:-1]
 				#get the species of the query
 				query_split = queryID.split('-')
@@ -91,7 +95,12 @@ for FileName in os.listdir('/Users/ionchannel/research/projects/blast.reports.13
 					#make all numbers integers
 				query_length = float(query_length)
 				top_hit_length = float(top_hit_length)
-				coverage_score = query_length / top_hit_length 
+				query_start = float(query_start)
+				query_end = float(query_end)
+				#coverage_score = query_length / top_hit_length 
+				#coverage_score = coverage_score * 100
+				coverage_score = query_end - query_start
+				coverage_score = coverage_score / query_length
 				coverage_score = coverage_score * 100
 				coverage_score = str(coverage_score)
 				#format the output
