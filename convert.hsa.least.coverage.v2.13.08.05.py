@@ -61,7 +61,7 @@ def find_lowest_coverage(dict_in):
 		percent_coverage = float(dict_in[key][1])
 		if percent_coverage < lowest_coverage:
 			lowest_coverage = percent_coverage
-			lowest_coverage_name = dict_in[key][0]
+			lowest_coverage_name = key + ' ' + dict_in[key][0]
 
 	return (lowest_coverage, lowest_coverage_name)
 
