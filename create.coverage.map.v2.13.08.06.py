@@ -45,19 +45,19 @@ for line in ce_length:
 for line in dr_length:
 	lineSplit = line.split('\t')
 	dr_length_dict[lineSplit[0]] = [lineSplit[1]]
-
+print '\n \n \n' + '---------------------------' + '\n \n \n' + 'RUN (create.coverage.map.v2.13.08.06.py) TO CREATE'
 
 ###Parse 2###
 ##for each file, create the name of the path and the name of the output file. then, 
 
-for FileName in os.listdir('/Users/ionchannel/research/projects/tophits.130805/'):
+for FileName in os.listdir('/Users/ionchannel/research/projects/proteome.analysis/blastReports.and.topHits.130806/'):
 	#if the filename has 'out.topHits.', add it to FileNames_list
 	if FileName[0:12] == 'out.topHits.' and FileName[-12:] != '.allS.noHits':
 		##IOin##
-		blast_in_path = '/Users/ionchannel/research/projects/tophits.130805/' + FileName
+		blast_in_path = '/Users/ionchannel/research/projects/proteome.analysis/blastReports.and.topHits.130806/' + FileName
 		blast_in = open(blast_in_path, 'r')
 		##IOout##
-		output_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/top.hits.coverage.13.08.02/' + FileName + '.coverage'
+		output_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/top.hits.coverage.13.08.06/' + FileName + '.coverage'
 		output_coverage = open(output_path, 'a')
 		
 		###Parse 1###
@@ -106,7 +106,7 @@ for FileName in os.listdir('/Users/ionchannel/research/projects/tophits.130805/'
 				#format the output
 				output = queryID + '\t' + subjectID + '\t' + coverage_score + '\n'
 				output_coverage.write(output)
-		print '\n \n \n' + '---------------------------' + '\n \n \n' + 'RUN (create.coverage.map.13.08.02.py) TO CREATE (' + FileName + '.coverage)'
+		print ' (' + FileName + '.coverage) '
 		
 		
 		

@@ -78,7 +78,7 @@ def get_list_cov(dict_in):
 	list_of_coverage = []
 	for key in dict_in.keys():
 
-		list_of_coverage.append(myround(dict_in[key][1]))
+		list_of_coverage.append(myround(float(dict_in[key][1])))
 	return (list_of_coverage)
 
 
@@ -88,18 +88,21 @@ def get_list_cov(dict_in):
 
 ###IOin###
 ##import the .conversion files
-hQdS_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/top.hits.coverage.13.08.02/out.topHits.homoQ.drosophilaS.coverage'
-hQcS_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/top.hits.coverage.13.08.02/out.topHits.homoQ.caenorhabditisS.coverage'
+hQdS_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/top.hits.coverage.13.08.06/out.topHits.homoQ.drosophilaS.coverage'
+hQcS_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/top.hits.coverage.13.08.06/out.topHits.homoQ.caenorhabditisS.coverage'
 
 
 ###IOout###
 ##the main output file
   #frmt: (hsa gene) (dr/ce gene) (% coverage)
-conversion_out = open('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/hsa.least.coverage.13.08.05/hsa.least.coverage.conversion.13.08.05' ,'a')
+conversion_out = open('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/hsa.least.coverage.13.08.06/hsa.least.coverage.conversion.13.08.06' ,'a')
 ##the averages file
-  #frmt: (dr 1,2,3,4) \n (ce 1,2,3,4)
-averages_out = open('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/hsa.least.coverage.13.08.05/hsa.least.coverage.conversion.13.08.05.averages' ,'a')
-
+  #frmt: (dr 1,2,3,4) \n (ce 1,2,3,4)  
+averages_out = open('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/hsa.least.coverage.13.08.06/hsa.least.coverage.conversion.13.08.06.averages' ,'a')
+##the distribution file
+   #frmt: #drosophila \n [0] [frequency] \n [5] [frequency] ... #celegans ...
+distr_out = open('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/hsa.least.coverage.13.08.06/hsa.least.coverage.conversion.13.08.06.distribution','a') 
+no_hits_out = open('/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/hsa.least.coverage.13.08.06/hsa.least.coverage.conversion.13.08.06.noHits' ,'a')
 
 
 
@@ -146,7 +149,7 @@ ce_cov_pep = sum_percent_cov(hqcs_dict) / 22244.0
 dr_cov_nohit = 0.0
 ce_cov_nohit = 0.0
 
-nohit_total = 5713.0 / 22784.0
+nohit_total = 5198.0 / 22244.0
 dr_cov_nohit = dr_avg_cov * nohit_total
 
 ce_cov_nohit = ce_avg_cov * nohit_total
@@ -167,15 +170,60 @@ output = output + str(dr_avg_cov) + '\t' + str(dr_cov_pep) + '\t' + str(dr_cov_n
 averages_out.write(output)
 
 ###Parse 3###
-##create a distribution of the percent coverages, when write to the averages_out file
+##create a distribution of the percent coverages, when write to the distr_out file
 #create a list of all the percent coverages (rounded to the nearest 5) - uses (get_list_cov)
 #define variables
 dr_list_cov = []
 ce_list_cov = []
+dr_list_cov_dict = {}
+ce_list_cov_dict = {}
 #use the function get_list_cov to assign the values to each list
 dr_list_cov = get_list_cov(hqds_dict)
 ce_list_cov = get_list_cov(hqcs_dict)
-
+#sort the lists from lowest to highest
+dr_list_cov.sort()
+ce_list_cov.sort()
+#create a dictionary using each number as a key. each time the script finds the number, it adds one to the entry
+for item in dr_list_cov:
+	#if item is in the keys of the dictionary, 
+	if item in dr_list_cov_dict.keys():
+		current_value = 0
+		current_value = dr_list_cov_dict[item][0]
+		new_value = current_value + 1
+		dr_list_cov_dict[item] = [new_value]
+	#if the item is not in the keys of the dict, add a new entry with a value of 1
+	if item not in dr_list_cov_dict.keys():
+		dr_list_cov_dict[item] = [1]
+for item in ce_list_cov:
+	#if item is in the keys of the dictionary, 
+	if item in ce_list_cov_dict.keys():
+		current_value = 0
+		current_value = ce_list_cov_dict[item][0]
+		new_value = current_value + 1
+		ce_list_cov_dict[item] = [new_value]
+	#if the item is not in the keys of the dict, add a new entry with a value of 1
+	if item not in ce_list_cov_dict.keys():
+		ce_list_cov_dict[item] = [1]
+#create a sorted list of keys
+dr_key_list = []
+ce_key_list = []
+dr_key_list = dr_list_cov_dict.keys()
+ce_key_list = ce_list_cov_dict.keys()
+dr_key_list.sort()
+ce_key_list.sort()
+#format the outputs
+output_dr_header = '#Drosophila: (frmt: percent coverage, frequency)' + '\n'
+distr_out.write(output_dr_header)
+output_ce_header = '#Celegans: (frmt: percent coverage, frequency)' + '\n' 
+#for each key in the dr dict (use dr_key_list), write the % coverage and the frequency
+for item in dr_key_list:
+	output = str(item) + '\t' + str(dr_list_cov_dict[item][0]) + '\n'
+	distr_out.write(output)
+#write the header for celegans, then write in the frequencies
+distr_out.write(output_ce_header)
+for item in ce_key_list:
+	output = str(item) + '\t' + str(ce_list_cov_dict[item][0]) + '\n'
+	distr_out.write(output)
 
 
 
@@ -232,14 +280,15 @@ for protein_id in hsa_proteome_id_list:
 		continue
 	##if the protein_id is not in either dictionaries' keys, write protein id to the noHits file
 	if protein_id not in hqcs_dict.keys() and protein_id not in hqds_dict.keys():
-		output = protein_id + '\n'
+		output = protein_id + '\t' + '-' + '\t' + '-' + '\n'
 		conversion_out.write(output)
+		no_hits_out.write(output)
 		#print output
 		continue
 
 
 
 
-
+distr_out.close()
 conversion_out.close()
 averages_out.close()
