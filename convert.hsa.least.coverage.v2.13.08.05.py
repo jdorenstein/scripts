@@ -74,12 +74,12 @@ def myround(x, base=5):
 def get_list_cov(dict_in):
 
 	#also, round the coverage to the nearest 5 and add to the list_of_coverage
-
+	list_coverage_noround = []
 	list_of_coverage = []
 	for key in dict_in.keys():
-
+		list_coverage_noround.append(float(dict_in[key][1]))
 		list_of_coverage.append(myround(float(dict_in[key][1])))
-	return (list_of_coverage)
+	return (list_of_coverage, list_coverage_noround)
 
 
 
@@ -177,12 +177,25 @@ dr_list_cov = []
 ce_list_cov = []
 dr_list_cov_dict = {}
 ce_list_cov_dict = {}
+dr_list_noround = []
+ce_list_noround = []
+dr_highest_cov = 0.0
+ce_highest_cov = 0.0
+dr_lowest_cov = 0.0
+ce_highest_cov = 0.0
 #use the function get_list_cov to assign the values to each list
-dr_list_cov = get_list_cov(hqds_dict)
-ce_list_cov = get_list_cov(hqcs_dict)
+dr_list_cov, dr_list_noround = get_list_cov(hqds_dict)
+ce_list_cov, ce_list_noround = get_list_cov(hqcs_dict)
 #sort the lists from lowest to highest
 dr_list_cov.sort()
 ce_list_cov.sort()
+dr_list_noround.sort()
+ce_list_noround.sort()
+#get the largest and smallest coverage for dr and ce
+dr_highest_cov = max(dr_list_noround)
+ce_highest_cov = max(ce_list_noround)
+dr_lowest_cov = min(dr_list_noround)
+ce_lowest_cov = min(ce_list_noround)
 #create a dictionary using each number as a key. each time the script finds the number, it adds one to the entry
 for item in dr_list_cov:
 	#if item is in the keys of the dictionary, 
@@ -212,9 +225,9 @@ ce_key_list = ce_list_cov_dict.keys()
 dr_key_list.sort()
 ce_key_list.sort()
 #format the outputs
-output_dr_header = '#Drosophila: (frmt: percent coverage, frequency)' + '\n'
+output_dr_header = '#Drosophila: (frmt: percent coverage, frequency)' + '\n' + 'Highest coverage: ' + str(dr_highest_cov) + '\n' + 'Lowest coverage: ' + str(dr_lowest_cov) + '\n'
 distr_out.write(output_dr_header)
-output_ce_header = '#Celegans: (frmt: percent coverage, frequency)' + '\n' 
+output_ce_header = '#Celegans: (frmt: percent coverage, frequency)' + '\n' + 'Highest coverage: ' + str(ce_highest_cov) + '\n' + 'Lowest coverage: ' + str(ce_lowest_cov) + '\n' 
 #for each key in the dr dict (use dr_key_list), write the % coverage and the frequency
 for item in dr_key_list:
 	output = str(item) + '\t' + str(dr_list_cov_dict[item][0]) + '\n'
