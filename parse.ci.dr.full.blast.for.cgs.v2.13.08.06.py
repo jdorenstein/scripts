@@ -55,7 +55,7 @@ ce_hs_blast = open(ce_hs_path, 'r')
 dr_hs_blast = open(dr_hs_path, 'r')
 
 #hsa cgs (frmt: (
-hsa_id_list_path = '/Users/ionchannel/research/projects/ionchannels/candidate.genesets.db/geneset/create.drosophila.celegans.cgs.try.one.13.07.29/candidate.genesets.id.list'
+hsa_id_list_path = '/Users/ionchannel/research/projects/ionchannels/candidate.genesets.db/geneset/candidate.genesets.id.list'
 hsa_id = open(hsa_id_list_path, 'r')
 
 
@@ -63,8 +63,8 @@ hsa_id = open(hsa_id_list_path, 'r')
 
 ##output frmt: (proteinID) (hsa id) \n
 path_cgs_out = '/Users/ionchannel/research/projects/ionchannels/candidate.genesets.db/geneset.'
-path_dr_out = path_cgs_out + 'drosophila/cgs.list.parse.13.08.06'
-path_ce_out = path_cgs_out + 'celegans/cgs.list.parse.13.08.06'
+path_dr_out = path_cgs_out + 'drosophila/cgs.list.parse.13.08.07'
+path_ce_out = path_cgs_out + 'celegans/cgs.list.parse.13.08.07'
 
 dr_cgs_out = open(path_dr_out, 'a')
 ce_cgs_out = open(path_ce_out, 'a')
