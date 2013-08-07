@@ -4,11 +4,11 @@ from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
 #this script reads in all of the proteomes used in the 13 proteomes fasta. for each proteome, it creates a file that contains the proteinID, and the length
-
+output = ''
 #create a list of all the names of the desired files
 FileName_list = []
 for FileName in os.listdir('/Users/ionchannel/13.PROTEOMES.PATH/000.origional.docs/'):
-	if FileName[0:9] == 'proteome.' and FileName != 'proteome.proteins.not.in.proteomes.fa':
+	if FileName[0:9] == 'proteome.':
 		FileName_list.append(FileName)
 #main loop. for each file name, create a file that contains the length and the proteinID
 for filename in FileName_list:
@@ -16,7 +16,7 @@ for filename in FileName_list:
 	#paths
 	candidate_path = '/Users/ionchannel/13.PROTEOMES.PATH/000.origional.docs/' + filename
 	###IOout###
-	lengths_out_path = '/Users/ionchannel/13.PROTEOMES.PATH/000.origional.docs/proteomes.lengths.13.08.02/' + filename[:-2] + 'lengths.fa'
+	lengths_out_path = '/Users/ionchannel/13.PROTEOMES.PATH/000.origional.docs/proteomes.lengths.13.08.07/' + filename[:-2] + 'lengths'
 	lengths_out = open(lengths_out_path, 'a')
 	#split the proteome into seq_record objects. for each, format the output as (id) (len). then output to file
 	for seq_record in SeqIO.parse(candidate_path, "fasta"):
@@ -26,7 +26,8 @@ for filename in FileName_list:
 		lengths_out.write(output)
 	
 
-	print  '\n \n \n' + '--------------------------------''RUN (create.length.proteome.13.08.02.py) TO CREATE (' + filename[:-2] + 'lengths.fa)'
+	output = output + '(' + filename[:-2] + 'lengths) '
 	lengths_out.close()
 	
 	
+print output
