@@ -30,4 +30,4 @@ for filename in FileName_list:
 	lengths_out.close()
 	
 	
-print output
+print printout
