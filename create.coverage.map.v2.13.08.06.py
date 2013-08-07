@@ -24,9 +24,9 @@ def create_hits_dict(blast_in):
 ##this script creates a formatted coverage map (Query) (subject) (%coverage) using eric's formatted blast reports
 ####eric's format: (query) (top hit) (bit score) (evalue) (percent identity) (alignment length) (query start) (query stop)
 ###IOin###
-hsa_prot_length_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/proteomes.lengths.13.08.02/proteome.homo.sapiens.primary.longest.peptide.lengths.fa'
-ce_prot_length_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/proteomes.lengths.13.08.02/proteome.caenorhabditis.elegans.longest.peptide.lengths.fa'
-dr_prot_length_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/proteomes.lengths.13.08.02/proteome.drosophila.melanogaster.longest.peptide.lengths.fa'
+hsa_prot_length_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/proteomes.lengths.13.08.07/proteome.homo.sapiens.primary.longest.peptide.lengths'
+ce_prot_length_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/proteomes.lengths.13.08.07/proteome.caenorhabditis.elegans.longest.peptide.lengths'
+dr_prot_length_path = '/Users/ionchannel/research/tools/db/blast/13.proteomes/000.origional.docs/proteomes.lengths.13.08.07/proteome.drosophila.melanogaster.longest.peptide.lengths'
 hsa_length = open(hsa_prot_length_path, 'r')
 ce_length = open(ce_prot_length_path, 'r')
 dr_length = open(dr_prot_length_path, 'r')
