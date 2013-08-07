@@ -4,7 +4,7 @@ from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
 #this script reads in all of the proteomes used in the 13 proteomes fasta. for each proteome, it creates a file that contains the proteinID, and the length
-output = ''
+printout = ''
 #create a list of all the names of the desired files
 FileName_list = []
 for FileName in os.listdir('/Users/ionchannel/13.PROTEOMES.PATH/000.origional.docs/'):
@@ -26,7 +26,7 @@ for filename in FileName_list:
 		lengths_out.write(output)
 	
 
-	output = output + '(' + filename[:-2] + 'lengths) '
+	printout = printout + '(' + filename[:-2] + 'lengths) '
 	lengths_out.close()
 	
 	
