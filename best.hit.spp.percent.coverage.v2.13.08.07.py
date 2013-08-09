@@ -145,9 +145,9 @@ for line in blast_report_in:
 	coverage_score = query_end - query_start
 	coverage_score = coverage_score / query_length
 	coverage_score = coverage_score * 100
-	
+
 	#compare coverage_score to the coverage score recorded in all_coverage_dict for query_id. if coverage_score is >=, add the subjectID to the list of outputs (if it is not already in the list). also, always add the redundant output
-	if coverage_score >= all_coverage_dict[query_id][0]:
+	if round(coverage_score, 10) >= round(all_coverage_dict[query_id][0], 10):
 		outputred = subject_id + '\n'
 		redun_out.write(outputred)
 		if subject_id not in cgs_out_list:
